@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getBlogs,getBlog } from "../lib/microms"
+
+export async function getStaticPaths() {
+  const response = await getBlogs({ fields:["id"]});
+  return response.contents.map((content: any) => ({
+    params: {
+      blogId: content.id
+    }
+  }));
+}
+
+const { blogId } = Astro.params;
+const blog = await getBlog(blogId as string);
+---
+<Layout title={blog.title}>
+  <main>
+    <h1 class="title">{blog.title}</h1>
+    <p class="publishedAt">公開日時：{blog.publishedAt}</p>
+    <div class="post" set:html={blog.content} ></div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin-top: 80px;
+    margin-left: 180px;
+    padding: 1rem;
+    min-width: 60ch;
+  }
+</style>

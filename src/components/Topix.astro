@@ -1,7 +1,18 @@
 ---
+import { getBlogs } from "../lib/microms";
+const response = await getBlogs({ fields: ["id", "title"]})
 ---
 <div class="topix">
   <h2>トピックス</h2>
+  <ul>
+    {
+      response.contents.map((content: any) => (
+        <li>
+          <a href={content.id}>{content.title}</a>
+        </li>
+      ))
+    }
+  </ul>
 </div>
 
 <style>
